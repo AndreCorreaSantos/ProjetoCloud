@@ -18,6 +18,7 @@ resource "aws_db_instance" "example" {
 
   # Configure the database subnet group and parameter group if needed
   db_subnet_group_name  = aws_db_subnet_group.db_subnet_group.name
+  skip_final_snapshot   = true 
 }
 
 resource "aws_db_subnet_group" "db_subnet_group" {
