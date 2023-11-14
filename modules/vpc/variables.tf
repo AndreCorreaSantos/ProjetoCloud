@@ -1,4 +1,10 @@
-variable region{
+variable region1{
+    description = "The instance region"
+    type        = string
+
+}
+
+variable region2{
     description = "The instance region"
     type        = string
 

@@ -5,9 +5,15 @@ region = "us-east-1"
 
 module "vpc" {
   source = "./modules/vpc"
-  region = "us-east-1a"
+  region1 = "us-east-1a"
+  region2 = "us-east-1b"
   subnet_cidr_block = "10.0.1.0/24"
+}
 
+module "rds" {
+  source = "./modules/rds"
+  subnet1_id = module.vpc.private_subnet1_id
+  subnet2_id = module.vpc.private_subnet2_id
 }
 
 module "ec2" {
