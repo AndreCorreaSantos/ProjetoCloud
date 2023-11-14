@@ -21,7 +21,17 @@ module "ec2" {
   ami = "ami-0533f2ba8a1995cf9"
   instance_type = "t2.micro"
   web_sg_id = aws_security_group.web_sg.id
-  public_subnet_id = module.vpc.public_subnet_id
+  private_subnet_id = module.vpc.private_subnet1_id
+}
+
+module "lb" {
+  source = "./modules/lb"
+  security_group_id = aws_security_group.web_sg.id
+  public_subnet1_id = module.vpc.public_subnet1_id
+  public_subnet2_id = module.vpc.public_subnet2_id
+  vpc_id = module.vpc.vpc_id
+  web_instance1_id = module.ec2.web_instance1_id
+  web_instance2_id = module.ec2.web_instance2_id
 }
 
 

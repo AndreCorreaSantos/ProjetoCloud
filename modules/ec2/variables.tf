@@ -3,8 +3,8 @@ variable web_sg_id {
     type        = string
 }
 
-variable public_subnet_id {
-    description = "The ID of the public subnet"
+variable private_subnet_id {
+    description = "The ID of the private subnet"
     type        = string
 }
 

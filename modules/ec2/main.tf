@@ -2,7 +2,7 @@ resource "aws_instance" "web_instance1" {
   ami           = var.ami
   instance_type = var.instance_type
 
-  subnet_id                   = var.public_subnet_id
+  subnet_id                   = var.private_subnet_id
   vpc_security_group_ids      = [var.web_sg_id]
   associate_public_ip_address = true
 
@@ -25,7 +25,7 @@ resource "aws_instance" "web_instance2" {
   ami           = var.ami
   instance_type = var.instance_type
 
-  subnet_id                   = var.public_subnet_id
+  subnet_id                   = var.private_subnet_id
   vpc_security_group_ids      = [var.web_sg_id]
   associate_public_ip_address = true
 

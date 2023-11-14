@@ -4,9 +4,15 @@ output "vpc_id" {
 }
 
 
-output "public_subnet_id" {
-    description = "The ID of the public subnet"
-    value       = aws_subnet.public_subnet.id
+output "public_subnet1_id" {
+    description = "The ID of the public subnet1"
+    value       = aws_subnet.public_subnet1.id
+
+}
+
+output "public_subnet2_id" {
+    description = "The ID of the public subnet2"
+    value       = aws_subnet.public_subnet2.id
 
 }
 
