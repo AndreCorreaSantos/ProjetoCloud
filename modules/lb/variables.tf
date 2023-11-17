@@ -10,22 +10,12 @@ variable public_subnet1_id {
 
 
 variable public_subnet2_id {
-    description = "The ID of the public subne2"
+    description = "The ID of the public subnet2"
     type        = string
 }
 
 
 variable vpc_id {
     description = "The ID of the VPC"
-    type        = string
-}
-
-variable web_instance1_id {
-    description = "The ID of the web instance1"
-    type        = string
-}
-
-variable web_instance2_id {
-    description = "The ID of the web instance2"
     type        = string
 }
