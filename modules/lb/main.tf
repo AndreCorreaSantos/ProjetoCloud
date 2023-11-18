@@ -18,14 +18,13 @@ resource "aws_lb_target_group" "web_target_group" {
   vpc_id   = var.vpc_id
 
   health_check {
-    path     = "/"
-    protocol = "HTTP"
-    port     = "80"
-    enabled = true
-    healthy_threshold = 2
-    unhealthy_threshold = 2
-    timeout = 10
-    interval = 30
+    path                = "/"  # Health check path for your application
+    interval            = 30   # Health check interval in seconds
+    protocol            = "HTTP"  # Health check protocol
+    port                = "traffic-port"  # Port used for health checks
+    timeout             = 10   # Health check timeout in seconds
+    healthy_threshold   = 2    # Number of consecutive successful health checks required to mark the target healthy
+    unhealthy_threshold = 2    # Number of consecutive failed health checks required to mark the target unhealthy
   }
 }
 
@@ -38,5 +37,5 @@ resource "aws_lb_listener" "lb_listener"{
     target_group_arn = aws_lb_target_group.web_target_group.arn
     type             = "forward"
   }
-}
+} 
 

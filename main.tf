@@ -18,7 +18,7 @@ module "rds" {
 
 module "ec2" {
   source = "./modules/ec2"
-  ami = "ami-0533f2ba8a1995cf9"
+  ami = "ami-00c39f71452c08778"
   instance_type = "t2.micro"
   sg = aws_security_group.ec2_sec_group.id
   private_subnet1_id = module.vpc.private_subnet1_id

@@ -8,6 +8,8 @@ resource "aws_launch_template" "launch_template" {
 
   user_data = base64encode(<<-EOF
               #!/bin/bash
+              yum update -y
+              yum install httpd -y
               echo "<h1>Hello, World!</h1>" > /var/www/html/index.html
               systemctl enable httpd
               systemctl start httpd
@@ -25,7 +27,6 @@ resource "aws_autoscaling_group" "autoscaling_group" {
     id = aws_launch_template.launch_template.id
     version = "$Latest"
   }
-  health_check_type = "EC2"
   vpc_zone_identifier  = [var.private_subnet1_id, var.private_subnet2_id]
   target_group_arns = [var.lb_target_group_arn]
 }
@@ -86,8 +87,8 @@ resource "aws_autoscaling_policy" "scale_down" {
 
 
 
-# # alb_integration.tf
-# resource "aws_autoscaling_attachment" "auto_attachment" {
-#   autoscaling_group_name = aws_autoscaling_group.autoscaling_group.name
-#   lb_target_group_arn   = var.lb_target_group_arn
-# }
+# alb_integration.tf
+resource "aws_autoscaling_attachment" "auto_attachment" {
+  autoscaling_group_name = aws_autoscaling_group.autoscaling_group.name
+  lb_target_group_arn   = var.lb_target_group_arn
+}
