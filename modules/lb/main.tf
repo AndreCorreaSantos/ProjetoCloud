@@ -5,6 +5,7 @@ resource "aws_lb" "web_lb" {
   security_groups    = [var.security_group_id] #CHECAR AQUI
   subnets            = [var.public_subnet1_id,var.public_subnet2_id]  # Subnets where the ALB will be deployed
   enable_deletion_protection = false
+  enable_cross_zone_load_balancing = true
   tags = {
     Name = "web-lb"
   }
