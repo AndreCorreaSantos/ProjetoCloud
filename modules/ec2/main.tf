@@ -6,15 +6,13 @@ resource "aws_launch_template" "launch_template" {
   instance_type          = var.instance_type
   vpc_security_group_ids = [var.sg]
 
-  user_data = base64encode(<<-EOF
-              #!/bin/bash
-              yum update -y
-              yum install httpd -y
-              echo "<h1>Hello, World!</h1>" > /var/www/html/index.html
-              systemctl enable httpd
-              systemctl start httpd
-              EOF
-            )
+  user_data = base64encode(templatefile("${path.module}/user_data.tftpl", { db_name = var.db_name, 
+                                                                            db_username = var.db_username, 
+                                                                            db_password = var.db_password}))
+
+  iam_instance_profile {
+    name = var.ec2_profile_name
+  }
 
 }
 

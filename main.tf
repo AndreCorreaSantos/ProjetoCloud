@@ -18,12 +18,16 @@ module "rds" {
 
 module "ec2" {
   source = "./modules/ec2"
-  ami = "ami-00c39f71452c08778"
+  ami = "ami-0fc5d935ebf8bc3bc"
   instance_type = "t2.micro"
   sg = aws_security_group.ec2_sec_group.id
   private_subnet1_id = module.vpc.private_subnet1_id
   private_subnet2_id = module.vpc.private_subnet2_id
   lb_target_group_arn = module.lb.alb_target_group
+  ec2_profile_name = module.iam.ec2_profile_name
+  db_name = "mydb" 
+  db_username = "admin"
+  db_password = "password123"
 }
 
 module "lb" {
@@ -32,6 +36,10 @@ module "lb" {
   public_subnet1_id = module.vpc.public_subnet1_id
   public_subnet2_id = module.vpc.public_subnet2_id
   vpc_id = module.vpc.vpc_id
+}
+
+module "iam" {
+  source = "./modules/iam"
 }
 
 

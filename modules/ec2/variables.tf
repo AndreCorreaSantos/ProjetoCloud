@@ -28,3 +28,24 @@ variable lb_target_group_arn{
     description = "ID of alb target group"
     type        = string
 }
+
+variable ec2_profile_name{
+    description = "Name of the ec2 profile"
+    type        = string
+}
+
+variable db_name{
+    description = "Name of the database"
+    type        = string
+}
+
+variable db_username{
+    description = "Username of the database"
+    type        = string
+}
+
+variable db_password{
+    description = "Password of the database"
+    type        = string
+}
+
