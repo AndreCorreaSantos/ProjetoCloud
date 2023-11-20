@@ -49,3 +49,9 @@ variable db_password{
     type        = string
 }
 
+
+variable PATH_TO_YOUR_PUBLIC_KEY {
+    description = "Path to your public key"
+    type        = string
+}
+

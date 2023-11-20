@@ -12,8 +12,9 @@ module "vpc" {
 
 module "rds" {
   source = "./modules/rds"
-  subnet1_id = module.vpc.private_subnet1_id
+  subnet1_id = module.vpc.private_subnet1_id 
   subnet2_id = module.vpc.private_subnet2_id
+  rds_sec_group = aws_security_group.rds_sec_group.id
 }
 
 module "ec2" {
@@ -21,13 +22,14 @@ module "ec2" {
   ami = "ami-0fc5d935ebf8bc3bc"
   instance_type = "t2.micro"
   sg = aws_security_group.ec2_sec_group.id
-  private_subnet1_id = module.vpc.private_subnet1_id
-  private_subnet2_id = module.vpc.private_subnet2_id
+  private_subnet1_id = module.vpc.public_subnet1_id #CHANGING TO PUBLIC TO DEBUC
+  private_subnet2_id = module.vpc.public_subnet2_id
   lb_target_group_arn = module.lb.alb_target_group
   ec2_profile_name = module.iam.ec2_profile_name
   db_name = "mydb" 
   db_username = "admin"
   db_password = "password123"
+  PATH_TO_YOUR_PUBLIC_KEY     = "/home/andre/.ssh/id_rsa.pub"
 }
 
 module "lb" {
@@ -106,3 +108,27 @@ resource "aws_security_group" "ec2_sec_group" {
   }
 }
 
+
+resource "aws_security_group" "rds_sec_group" {
+  name        = "rds-sg"
+  description = "Security group for RDS instances"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ec2_sec_group.id]
+  }
+  
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "rds-sg"
+  }
+}

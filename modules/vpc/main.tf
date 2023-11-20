@@ -89,10 +89,20 @@ resource "aws_route_table_association" "public_subnet2_rt_a" {
 ####################################################################
 # Elastic IP for NAT gateway
 resource "aws_eip" "eip1" {
-  depends_on = [aws_internet_gateway.gateway]
+  # depends_on = [aws_internet_gateway.gateway] #NAO SEI SE POSSO TIRAR
   vpc        = true
   tags = {
     Name = "eip1"
+  }
+}
+
+
+# Elastic IP for NAT gateway
+resource "aws_eip" "eip2" {
+  # depends_on = [aws_internet_gateway.gateway]
+  vpc        = true
+  tags = {
+    Name = "eip2"
   }
 }
 
@@ -101,21 +111,13 @@ resource "aws_eip" "eip1" {
 resource "aws_nat_gateway" "nat_gw_1" {
   allocation_id = aws_eip.eip1.id
   subnet_id     = aws_subnet.public_subnet1.id # nat should be in public subnet
-  depends_on = [aws_internet_gateway.gateway]
+  # depends_on = [aws_internet_gateway.gateway]
 
   tags = {
     Name = "nat gateway 1"
   }
 }
 
-# Elastic IP for NAT gateway
-resource "aws_eip" "eip2" {
-  depends_on = [aws_internet_gateway.gateway]
-  vpc        = true
-  tags = {
-    Name = "eip2"
-  }
-}
 
 
 # NAT gateway for private subnets 
@@ -123,7 +125,7 @@ resource "aws_eip" "eip2" {
 resource "aws_nat_gateway" "nat_gw_2" {
   allocation_id = aws_eip.eip2.id
   subnet_id     = aws_subnet.public_subnet2.id # nat should be in public subnet
-  depends_on = [aws_internet_gateway.gateway]
+  # depends_on = [aws_internet_gateway.gateway]
 
   tags = {
     Name = "nat gateway 2"
@@ -141,7 +143,7 @@ resource "aws_route_table" "private_rt_1" {
     nat_gateway_id = aws_nat_gateway.nat_gw_1.id
   }
   tags = {
-    Name = "private route table 1"
+    Name = "private route table"
   }
 }
 

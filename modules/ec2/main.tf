@@ -1,3 +1,9 @@
+resource "aws_key_pair" "deployer" {
+  key_name   = "deployer-key"
+  public_key = file("/home/andre/.ssh/id_rsa.pub")
+}
+
+
 # launch_template.tf
 resource "aws_launch_template" "launch_template" {
   name = "MyLaunchTemplate"
@@ -8,7 +14,7 @@ resource "aws_launch_template" "launch_template" {
 
   user_data = base64encode(templatefile("${path.module}/user_data.tftpl", { db_name = var.db_name, 
                                                                             db_username = var.db_username, 
-                                                                            db_password = var.db_password}))
+                                                                            db_password = var.db_password})) #APLICACAO NAO CONSEGUE SE CONECTAR NA DB E POR ISSO NAO DA PRA RODAR
 
   iam_instance_profile {
     name = var.ec2_profile_name
