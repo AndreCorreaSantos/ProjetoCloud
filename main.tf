@@ -26,9 +26,9 @@ module "ec2" {
   private_subnet2_id = module.vpc.public_subnet2_id
   lb_target_group_arn = module.lb.alb_target_group
   ec2_profile_name = module.iam.ec2_profile_name
-  db_name = "mydb" 
-  db_username = "admin"
-  db_password = "password123"
+  db_name = module.rds.db_name 
+  db_username = module.rds.db_username
+  db_password = module.rds.db_password
   PATH_TO_YOUR_PUBLIC_KEY     = "/home/andre/.ssh/id_rsa.pub"
 }
 

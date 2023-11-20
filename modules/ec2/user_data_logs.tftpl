@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Update the system
+sudo apt-get update
+sudo apt-get install -y python3-pip python3-venv git authbind awscli
+
+# Clone the API repo
+git clone https://github.com/AndreCorreaSantos/simple_python_crud /home/ubuntu/simple_python_crud
+cd /home/ubuntu/simple_python_crud
+
+# Set up venv
+sudo chown -R ubuntu:ubuntu ~/simple_python_crud
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+
+# Export necessary variables
+export DB_ENDPOINT=$(aws rds describe-db-instances --region us-east-1 --query 'DBInstances[0].Endpoint.Address' --output text)
+export DB_HOST=$(dig +short $DB_ENDPOINT)
+export DB_NAME=${db_name}
+export DB_USER=${db_username}
+export DB_PASS=${db_password}
+export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+
+# Create logs directory and write exported variables
+mkdir /home/ubuntu/simple_python_crud/logs
+echo "DB_ENDPOINT=$DB_ENDPOINT" > /home/ubuntu/simple_python_crud/logs/log_endpoint.txt
+echo "DB_HOST=$DB_HOST" >> /home/ubuntu/simple_python_crud/logs/log_host.txt
+echo "DB_NAME=$DB_NAME" >> /home/ubuntu/simple_python_crud/logs/log_db_name.txt
+echo "DB_USER=$DB_USER" >> /home/ubuntu/simple_python_crud/logs/log_db_user.txt
+echo "DB_PASS=$DB_PASS" >> /home/ubuntu/simple_python_crud/logs/log_db_pass.txt
+echo "INSTANCE_ID=$INSTANCE_ID" >> /home/ubuntu/simple_python_crud/logs/log_db_instance.txt
+
+aws logs create-log-stream --log-group-name "/my-fastapi-app/logs" --log-stream-name "$INSTANCE_ID" --region us-east-1
+
+# Bind to port 80
+sudo touch /etc/authbind/byport/80
+sudo chmod 500 /etc/authbind/byport/80
+sudo chown ubuntu /etc/authbind/byport/80
+
+# Starting the app
+authbind --deep uvicorn main:app --host 0.0.0.0 --port 80
