@@ -21,6 +21,11 @@ resource "aws_launch_template" "launch_template" {
 
 }
 
+
+resource "aws_cloudwatch_log_group" "my_log_group" {
+  name = "/my-fastapi-app/logs"
+}
+
 # auto_scaling_group.tf
 resource "aws_autoscaling_group" "autoscaling_group" {
   desired_capacity     = 2
@@ -30,7 +35,7 @@ resource "aws_autoscaling_group" "autoscaling_group" {
     id = aws_launch_template.launch_template.id
     version = "$Latest"
   }
-  vpc_zone_identifier  = [var.private_subnet1_id, var.private_subnet2_id]
+  vpc_zone_identifier  = [var.public_subnet1_id, var.public_subnet2_id]
   target_group_arns = [var.lb_target_group_arn]
 }
 
@@ -95,3 +100,4 @@ resource "aws_autoscaling_attachment" "auto_attachment" {
   autoscaling_group_name = aws_autoscaling_group.autoscaling_group.name
   lb_target_group_arn   = var.lb_target_group_arn
 }
+

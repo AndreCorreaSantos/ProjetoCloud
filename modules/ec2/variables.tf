@@ -3,13 +3,13 @@ variable sg {
     type        = string
 }
 
-variable private_subnet1_id {
-    description = "The ID of the private subnet"
+variable public_subnet1_id {
+    description = "The ID of the public subnet"
     type        = string
 }
 
-variable private_subnet2_id {
-    description = "The ID of the private subnet"
+variable public_subnet2_id {
+    description = "The ID of the public subnet"
     type        = string
 }
 

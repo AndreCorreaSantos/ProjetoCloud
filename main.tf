@@ -22,8 +22,8 @@ module "ec2" {
   ami = "ami-0fc5d935ebf8bc3bc"
   instance_type = "t2.micro"
   sg = aws_security_group.ec2_sec_group.id
-  private_subnet1_id = module.vpc.public_subnet1_id #CHANGING TO PUBLIC TO DEBUC
-  private_subnet2_id = module.vpc.public_subnet2_id
+  public_subnet1_id = module.vpc.public_subnet1_id 
+  public_subnet2_id = module.vpc.public_subnet2_id
   lb_target_group_arn = module.lb.alb_target_group
   ec2_profile_name = module.iam.ec2_profile_name
   db_name = module.rds.db_name 
@@ -44,6 +44,13 @@ module "iam" {
   source = "./modules/iam"
 }
 
+terraform {
+  backend "s3" {
+    bucket = "mybucket"
+    key    = "terraform.tfstate"
+    region = "us-east-1"
+  }
+}
 
 
 resource "aws_security_group" "lb_sec_group" {
