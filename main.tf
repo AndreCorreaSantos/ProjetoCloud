@@ -30,6 +30,8 @@ module "ec2" {
   db_username = module.rds.db_username
   db_password = module.rds.db_password
   PATH_TO_YOUR_PUBLIC_KEY     = "/home/andre/.ssh/id_rsa.pub"
+  locust_sg_id = aws_security_group.locust_sec_group.id
+  dns_name= module.lb.alb_dns_name
 }
 
 module "lb" {
@@ -46,7 +48,7 @@ module "iam" {
 
 terraform {
   backend "s3" {
-    bucket = "mybucket"
+    bucket = "andrebucket"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
@@ -139,3 +141,28 @@ resource "aws_security_group" "rds_sec_group" {
     Name = "rds-sg"
   }
 }
+
+resource "aws_security_group" "locust_sec_group" {
+  name        = "locust-sg"
+  description = "Security group for Locust"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "locust-sg"
+  }
+}
+

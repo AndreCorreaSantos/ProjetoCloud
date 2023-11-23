@@ -44,44 +44,44 @@ resource "aws_autoscaling_policy" "scale_up" {
   name                   = "ScaleUp"
   scaling_adjustment    = 1
   adjustment_type       = "ChangeInCapacity"
-  cooldown              = 300
+  cooldown              = 10
   autoscaling_group_name = aws_autoscaling_group.autoscaling_group.name
 }
 
 # cloudwatch_alarm.tf
 resource "aws_cloudwatch_metric_alarm" "cpu_alarm" {
-  alarm_name          = "CPUAlarm"
+  alarm_name          = "HighCPU"
   comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = 2
+  evaluation_periods  = "2"
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
-  period              = 300
+  period              = "10"
   statistic           = "Average"
-  threshold           = 70
+  threshold           = "20"
 
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.autoscaling_group.name
   }
 
-  alarm_actions = ["arn:aws:sns:us-east-1:123456789012:MyTopic"] # criar depois
+  alarm_actions = [aws_autoscaling_policy.scale_up.arn] # SCALE UP
 }
 
 # cloudwatch_low_cpu_alarm.tf
 resource "aws_cloudwatch_metric_alarm" "low_cpu_alarm" {
-  alarm_name          = "LowCPUAlarm"
+  alarm_name          = "LowCPU"
   comparison_operator = "LessThanThreshold"
-  evaluation_periods  = 2
+  evaluation_periods  = "2"
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
-  period              = 300
+  period              = "10"
   statistic           = "Average"
-  threshold           = 30  # Adjust this threshold based on your requirements
+  threshold           = "10"
 
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.autoscaling_group.name
   }
 
-  alarm_actions = ["arn:aws:sns:us-east-1:123456789012:MyScaleDownTopic"]  # CRIAR ISSO!
+  alarm_actions = [aws_autoscaling_policy.scale_down.arn]  # CRIAR ISSO!
 }
 
 # scaling_policy_scale_down.tf
@@ -89,7 +89,7 @@ resource "aws_autoscaling_policy" "scale_down" {
   name                   = "ScaleDown"
   scaling_adjustment    = -1  # Negative value for scale down
   adjustment_type       = "ChangeInCapacity"
-  cooldown              = 300
+  cooldown              = 10
   autoscaling_group_name = aws_autoscaling_group.autoscaling_group.name
 }
 
@@ -101,3 +101,23 @@ resource "aws_autoscaling_attachment" "auto_attachment" {
   lb_target_group_arn   = var.lb_target_group_arn
 }
 
+
+
+#### LOCUST
+
+resource "aws_instance" "locust" {
+    ami                         = "ami-0fc5d935ebf8bc3bc"
+    instance_type               = "t2.micro"
+    vpc_security_group_ids      = [var.locust_sg_id]
+    subnet_id                   = var.public_subnet1_id
+    associate_public_ip_address = true
+    
+    user_data = base64encode(templatefile("${path.module}/user_data_locust.tftpl", {
+        dns_name = var.dns_name
+    }))
+
+    tags = {
+        Name = "ec2-locust"
+    }
+    
+}

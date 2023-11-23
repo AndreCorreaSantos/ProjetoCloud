@@ -55,3 +55,12 @@ variable PATH_TO_YOUR_PUBLIC_KEY {
     type        = string
 }
 
+variable locust_sg_id {
+    description = "ID of the locust security group"
+    type        = string
+}
+
+variable dns_name{
+    description = "DNS name of the load balancer"
+    type        = string
+}
