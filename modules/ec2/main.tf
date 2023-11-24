@@ -101,6 +101,24 @@ resource "aws_autoscaling_attachment" "auto_attachment" {
   lb_target_group_arn   = var.lb_target_group_arn
 }
 
+resource "aws_autoscaling_policy" "scale_up_down_tracking" {
+  policy_type            = "TargetTrackingScaling"
+  name                   = "scale-up-down-tracking"
+  estimated_instance_warmup = 180
+  autoscaling_group_name = aws_autoscaling_group.autoscaling_group.name
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ALBRequestCountPerTarget"
+      resource_label = "${split("/", var.aws_lb_id)[1]}/${split("/", var.aws_lb_id)[2]}/${split("/", var.aws_lb_id)[3]}/targetgroup/${split("/", var.lb_target_group_arn)[1]}/${split("/", var.lb_target_group_arn)[2]}"
+    }
+    target_value = 200
+  }
+
+  lifecycle {
+    create_before_destroy = true 
+  }
+}
 
 
 #### LOCUST

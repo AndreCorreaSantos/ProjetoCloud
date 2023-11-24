@@ -32,6 +32,7 @@ module "ec2" {
   PATH_TO_YOUR_PUBLIC_KEY     = "/home/andre/.ssh/id_rsa.pub"
   locust_sg_id = aws_security_group.locust_sec_group.id
   dns_name= module.lb.alb_dns_name
+  aws_lb_id = module.lb.alb_id
 }
 
 module "lb" {
