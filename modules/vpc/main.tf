@@ -88,86 +88,86 @@ resource "aws_route_table_association" "public_subnet2_rt_a" {
 
 ####################################################################
 # Elastic IP for NAT gateway
-resource "aws_eip" "eip1" {
-  # depends_on = [aws_internet_gateway.gateway] #NAO SEI SE POSSO TIRAR
-  vpc        = true
-  tags = {
-    Name = "eip1"
-  }
-}
+# resource "aws_eip" "eip1" {
+#   # depends_on = [aws_internet_gateway.gateway] #NAO SEI SE POSSO TIRAR
+#   vpc        = true
+#   tags = {
+#     Name = "eip1"
+#   }
+# }
 
 
-# Elastic IP for NAT gateway
-resource "aws_eip" "eip2" {
-  # depends_on = [aws_internet_gateway.gateway]
-  vpc        = true
-  tags = {
-    Name = "eip2"
-  }
-}
+# # Elastic IP for NAT gateway
+# resource "aws_eip" "eip2" {
+#   # depends_on = [aws_internet_gateway.gateway]
+#   vpc        = true
+#   tags = {
+#     Name = "eip2"
+#   }
+# }
 
-# NAT gateway for private subnets 
-# (for the private subnet to access internet - eg. ec2 instances downloading softwares from internet)
-resource "aws_nat_gateway" "nat_gw_1" {
-  allocation_id = aws_eip.eip1.id
-  subnet_id     = aws_subnet.public_subnet1.id # nat should be in public subnet
-  # depends_on = [aws_internet_gateway.gateway]
+# # NAT gateway for private subnets 
+# # (for the private subnet to access internet - eg. ec2 instances downloading softwares from internet)
+# resource "aws_nat_gateway" "nat_gw_1" {
+#   # allocation_id = aws_eip.eip1.id
+#   subnet_id     = aws_subnet.public_subnet1.id # nat should be in public subnet
+#   # depends_on = [aws_internet_gateway.gateway]
 
-  tags = {
-    Name = "nat gateway 1"
-  }
-}
-
-
-
-# NAT gateway for private subnets 
-# (for the private subnet to access internet - eg. ec2 instances downloading softwares from internet)
-resource "aws_nat_gateway" "nat_gw_2" {
-  allocation_id = aws_eip.eip2.id
-  subnet_id     = aws_subnet.public_subnet2.id # nat should be in public subnet
-  # depends_on = [aws_internet_gateway.gateway]
-
-  tags = {
-    Name = "nat gateway 2"
-  }
-}
+#   tags = {
+#     Name = "nat gateway 1"
+#   }
+# }
 
 
 
-# route table - connecting to NAT
-resource "aws_route_table" "private_rt_1" {
-  vpc_id = aws_vpc.vpc1.id
+# # NAT gateway for private subnets 
+# # (for the private subnet to access internet - eg. ec2 instances downloading softwares from internet)
+# resource "aws_nat_gateway" "nat_gw_2" {
+#   # allocation_id = aws_eip.eip2.id
+#   subnet_id     = aws_subnet.public_subnet2.id # nat should be in public subnet
+#   # depends_on = [aws_internet_gateway.gateway]
 
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat_gw_1.id
-  }
-  tags = {
-    Name = "private route table"
-  }
-}
+#   tags = {
+#     Name = "nat gateway 2"
+#   }
+# }
 
 
-# route table - connecting to NAT
-resource "aws_route_table" "private_rt_2" {
-  vpc_id = aws_vpc.vpc1.id
 
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat_gw_2.id
-  }
-  tags = {
-    Name = "private route table 2"
-  }
-}
+# # route table - connecting to NAT
+# resource "aws_route_table" "private_rt_1" {
+#   vpc_id = aws_vpc.vpc1.id
 
-// Associate Private Subnets with Private Route Tables
-resource "aws_route_table_association" "rta3" {
-  subnet_id      = aws_subnet.private_subnet1.id
-  route_table_id = aws_route_table.private_rt_1.id
-}
+#   route {
+#     cidr_block     = "0.0.0.0/0"
+#     nat_gateway_id = aws_nat_gateway.nat_gw_1.id
+#   }
+#   tags = {
+#     Name = "private route table"
+#   }
+# }
 
-resource "aws_route_table_association" "rta4" {
-  subnet_id      = aws_subnet.private_subnet2.id
-  route_table_id = aws_route_table.private_rt_2.id
-}
+
+# # route table - connecting to NAT
+# resource "aws_route_table" "private_rt_2" {
+#   vpc_id = aws_vpc.vpc1.id
+
+#   route {
+#     cidr_block     = "0.0.0.0/0"
+#     nat_gateway_id = aws_nat_gateway.nat_gw_2.id
+#   }
+#   tags = {
+#     Name = "private route table 2"
+#   }
+# }
+
+# // Associate Private Subnets with Private Route Tables
+# resource "aws_route_table_association" "rta3" {
+#   subnet_id      = aws_subnet.private_subnet1.id
+#   route_table_id = aws_route_table.private_rt_1.id
+# }
+
+# resource "aws_route_table_association" "rta4" {
+#   subnet_id      = aws_subnet.private_subnet2.id
+#   route_table_id = aws_route_table.private_rt_2.id
+# }
