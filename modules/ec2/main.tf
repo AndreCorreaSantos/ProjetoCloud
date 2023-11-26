@@ -28,6 +28,7 @@ resource "aws_cloudwatch_log_group" "my_log_group" {
 
 # auto_scaling_group.tf
 resource "aws_autoscaling_group" "autoscaling_group" {
+  name                 = "MyAutoScalingGroup"
   desired_capacity     = 2
   max_size             = 5
   min_size             = 1
