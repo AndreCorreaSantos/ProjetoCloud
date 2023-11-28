@@ -1,6 +1,5 @@
 # ProjetoCloud
 
-
 # VPC
 
 Para iniciar o projeto, foi criada uma VPC na qual todos os recursos utilizados foram instanciados. Essa VPC foi configurada no bloco de CIDR `10.0.0.0/16`. Toda a infraestrutura mencionada a partir deste ponto está contida dentro dessa VPC.
@@ -25,14 +24,11 @@ O banco de dados utilizado pelas aplicações é um RDS associado às duas sub-r
 
 Para testar toda a infraestrutura e, principalmente, se o Auto Scaling Group responde de forma adequada à demanda variada, um EC2 foi alocado em uma das subnets públicas, fora do Auto Scaling Group. Esse EC2 contém um "user_data" que inicializa o Locust, uma aplicação capaz de realizar testes de carga e fornecer dados relevantes relacionados às respostas da infraestrutura.
 
-
 ## Repositórios auxiliares
 
 A aplicação utilizada no projeto está presente em https://github.com/AndreCorreaSantos/simple_python_crud.git e o locust está contido em https://github.com/AndreCorreaSantos/locust.
 
-
 ## Execução
-
 
 Para executar a infraestrutura, é necessário possuir a AWS CLI instalada e exportar suas credenciais da AWS como variáveis de ambiente:
 
@@ -67,11 +63,7 @@ Substitua `dns_name` pelo valor obtido anteriormente.
 
 Para rodar os testes de carga, basta inserir o IP público da instância que contém o Locust no navegador e acessar sua porta 8089.
 
-
-
 Para encontrar o IP público, podemos executar o seguinte comando:
-
-
 
 ```bash
 
@@ -79,11 +71,7 @@ terraform state show module.ec2.aws_instance.locust
 
 ```
 
-
-
 A variável `public_ip` armazena o endereço público dessa instância. Portanto, basta digitar o seguinte no navegador:
-
-
 
 ```
 
@@ -91,11 +79,17 @@ public_ip:8089
 
 ```
 
-
-
 Substitua `public_ip` pelo valor obtido anteriormente. Isso permitirá acessar a interface do Locust e executar os testes de carga.
-
 
 # Diagrama da infraestrutura
 
 ![Diagrama](Diagrama.jpg)
+
+
+## Análise de custo
+
+foram inseridas as especificações da arquitetura na calculadora de custo da aws, inclusive com valores de carga e tempo de resposta providenciados pelo locust, como tempo de resposta menor que 1 ms e 30 requests por segundo em pico.
+
+```xml
+[Download PDF](preço.pdf)
+```

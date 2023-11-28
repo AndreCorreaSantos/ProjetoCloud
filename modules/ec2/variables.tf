@@ -65,7 +65,6 @@ variable dns_name{
     type        = string
 }
 
-
 variable aws_lb_id{
     description = "ID of the load balancer"
     type        = string

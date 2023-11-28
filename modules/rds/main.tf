@@ -11,7 +11,7 @@ resource "aws_db_instance" "rds" {
   password              = "password123" # Set the master password
 
   # Other optional settings
-  multi_az              = true  # Set to true for multi-AZ deployment TEMPORARILY REMOVING IT TO TEST  
+  multi_az              = true  # Set to true for multi-AZ deployment
   publicly_accessible   = false  # Set to true if the RDS should be publicly accessible
 
   # Configure the database subnet group and parameter group if needed
