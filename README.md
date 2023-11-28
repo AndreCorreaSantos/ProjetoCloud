@@ -90,6 +90,4 @@ Substitua `public_ip` pelo valor obtido anteriormente. Isso permitirá acessar a
 
 foram inseridas as especificações da arquitetura na calculadora de custo da aws, inclusive com valores de carga e tempo de resposta providenciados pelo locust, como tempo de resposta menor que 1 ms e 30 requests por segundo em pico.
 
-```xml
 [Download PDF](preço.pdf)
-```
