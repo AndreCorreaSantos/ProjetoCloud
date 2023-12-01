@@ -85,9 +85,39 @@ Substitua `public_ip` pelo valor obtido anteriormente. Isso permitirá acessar a
 
 ![Diagrama](Diagrama.jpg)
 
-
 ## Análise de custo
 
-foram inseridas as especificações da arquitetura na calculadora de custo da aws, inclusive com valores de carga e tempo de resposta providenciados pelo locust, como tempo de resposta menor que 1 ms e 30 requests por segundo em pico.
+foram inseridas as especificações da arquitetura na calculadora de custo da aws, inclusive com valores de carga e tempo de resposta providenciados pelo locust, como tempo de resposta menor que 1 ms e 30 requests por segundo.
+
+![l](LocustTest.png)
+
+
+### Configuração de Recursos
+
+1. **S3**
+
+   - Armazenamento padrão
+   - 1GB por mês para bloqueio de estado do Terraform.
+2. **EC2**
+
+   - 5 instâncias para lidar com uma carga constante de 30 requisições por segundo (rps).
+   - 1 instância hospedando o Locust para teste de desempenho.
+3. **Balanceador de Carga**
+
+   - Balanceador de Carga de Aplicação
+   - 0.144 GB processados para instâncias EC2 por mês.
+   - 100 novas conexões por segundo.
+   - Capacidade para 30 rps.
+4. **RDS**
+
+   - Configuração Multi-AZ
+   - Disponibilidade 24/7
+   - Armazenamento de 20GB.
+5. **VPC**
+
+   - IPAM (Gerenciamento de Endereços IP)
+   - 6 endereços IP alocados para instâncias EC2.
+
+
 
 [Download PDF](preço.pdf)
