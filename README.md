@@ -8,9 +8,17 @@ Para iniciar o projeto, foi criada uma VPC na qual todos os recursos utilizados 
 
 Para possibilitar a criação de um Elastic Load Balancer, torna-se necessária a presença de duas redes públicas. Para atender a essa necessidade, foram instanciadas duas redes públicas, com blocos de CIDR equivalentes a `10.0.1.0/24` e `10.0.2.0/24`, em regiões diferentes para garantir alta disponibilidade. Essas redes foram associadas a um Internet Gateway utilizando uma tabela de roteamento, com uma associação de tabela de roteamento para cada sub-rede. As sub-redes mencionadas e a tabela de roteamento foram criadas dentro do módulo VPC; o Load Balancer foi criado dentro do módulo LB. Além disso, para atender às necessidades do RDS, foram criadas duas sub-redes privadas dentro da VPC. É importante notar que essas sub-redes não têm contato com as redes públicas, e seus blocos de CIDR são, respectivamente, `10.0.3.0/24` e `10.0.4.0/24`.
 
+## Load Balancer
+Como citado anteriormente, um elastic load balancer foi criado que roteia o tráfego para as instâncias do auto scaling group que residem dentro do target group que é alvo do load balancer e performa health checks na rota "/" dessas instâncias usando o protocolo http para garantir que o tráfego seja roteado apenas para instâncias saudáveis.
+
 ## Auto Scaling Group
 
 Para garantir que a infraestrutura tenha poder computacional para atender picos de demanda e, ao mesmo tempo, seja financeiramente eficiente, foi criado um Auto Scaling Group com alarmes de tráfego e utilização de CPU. Esse grupo aumenta e diminui a quantidade de máquinas alocadas de forma proporcional à demanda. Esse Auto Scaling Group cria instâncias EC2 dentro das redes públicas alocadas, e as instâncias são criadas dentro do Target Group do Load Balancer. Dessa forma, toda nova instância já é capaz de receber tráfego do mesmo.
+Para ativar o scaling e aumentar o número de instâncias é necessário rodar o locust com 100 users e uma spawn rate de 100.
+
+## CloudWatch Logs
+
+Foi criado um log Group chamado my-fastapi-app/logs, onde cada instância cria uma stream de logs e registra todo evento que acontece na aplicação.
 
 ## Aplicação
 
