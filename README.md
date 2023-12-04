@@ -146,6 +146,8 @@ foram inseridas as especificações da arquitetura na calculadora de custo da aw
    - IPAM (Gerenciamento de Endereços IP)
    - 6 endereços IP alocados para instâncias EC2.
 
+## Otimização de preço
+A principal otimização de preço que identifiquei para o meu tipo de aplicação seria a utilização de instâncias EC2 reservadas com compromissos de longo prazo, proporcionando economias substanciais em comparação com instâncias sob demanda. Essa estratégia permitiria aproveitar as vantagens das Reservas de Instância, oferecendo estabilidade financeira e previsibilidade de custos, especialmente para cargas de trabalho consistentes e de longa duração. 
 
 
 [Download PDF](preço.pdf)
