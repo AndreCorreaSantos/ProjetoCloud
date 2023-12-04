@@ -40,8 +40,6 @@ O Security Group `rds-sg` é utilizado para restringir o acesso ao banco de dado
 
 O Security Group `locust-sg` é dedicado à instância que executa o Locust para testes de carga. Ele permite todo o tráfego de entrada e saída, pois o Locust precisa se comunicar com a infraestrutura durante os testes.
 
-Essas configurações de Security Groups garantem que apenas o tráfego necessário seja permitido entre os diferentes componentes da infraestrutura, proporcionando uma camada adicional de segurança. Certifique-se de revisar e ajustar essas configurações de acordo com as necessidades específicas de sua aplicação e ambiente.
-
 ## Locust
 
 Para testar toda a infraestrutura e, principalmente, se o Auto Scaling Group responde de forma adequada à demanda variada, um EC2 foi alocado em uma das subnets públicas, fora do Auto Scaling Group. Esse EC2 contém um "user_data" que inicializa o Locust, uma aplicação capaz de realizar testes de carga e fornecer dados relevantes relacionados às respostas da infraestrutura.
