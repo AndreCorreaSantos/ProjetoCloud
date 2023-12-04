@@ -18,7 +18,29 @@ A aplicação que roda dentro de todas as máquinas é um CRUD básico que está
 
 ## Banco de dados (RDS)
 
-O banco de dados utilizado pelas aplicações é um RDS associado às duas sub-redes privadas mencionadas.
+O banco de dados utilizado pelas aplicações é um RDS associado às duas sub-redes privadas mencionadas com multi-az (multi availability zones) para garantir alta disponibilidade - é possível usar mais de uma zona de disponibilidade por conta das redes privadas nas quais o rds reside estarem em duas zonas diferentes.
+
+## Security Groups
+
+Para permitir o tráfego entre os diferentes componentes da nossa infraestrutura, foram definidos Security Groups específicos para cada tipo de recurso. A configuração dos Security Groups baseia-se nas necessidades de comunicação entre esses recursos.
+
+### Load Balancer (ALB) Security Group
+
+O Security Group `alb-sg` é dedicado ao nosso Application Load Balancer (ALB). Ele permite o tráfego nas portas 80 e 443 para todo o tráfego IPv4 (`0.0.0.0/0`). Isso garante que o ALB possa receber solicitações HTTP e HTTPS de qualquer origem.
+
+### EC2 Instances Security Group
+
+O Security Group `ec2-sg` é associado às instâncias EC2. Ele permite o tráfego na porta 80 para o ALB (usando o Security Group `lb_sec_group`) e tráfego SSH (porta 22) de qualquer origem (`0.0.0.0/0`).
+
+### RDS (Relational Database Service) Security Group
+
+O Security Group `rds-sg` é utilizado para restringir o acesso ao banco de dados RDS, permitindo apenas tráfego na porta 3306 vindo das instâncias EC2 (usando o Security Group `ec2_sec_group`).
+
+### Locust Security Group
+
+O Security Group `locust-sg` é dedicado à instância que executa o Locust para testes de carga. Ele permite todo o tráfego de entrada e saída, pois o Locust precisa se comunicar com a infraestrutura durante os testes.
+
+Essas configurações de Security Groups garantem que apenas o tráfego necessário seja permitido entre os diferentes componentes da infraestrutura, proporcionando uma camada adicional de segurança. Certifique-se de revisar e ajustar essas configurações de acordo com as necessidades específicas de sua aplicação e ambiente.
 
 ## Locust
 
