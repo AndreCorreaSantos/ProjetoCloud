@@ -66,7 +66,19 @@ export AWS_SECRET_ACCESS_KEY=************
 export AWS_DEFAULT_REGION=*****************
 ```
 
-Também é necessário ter um bucket S3 de nome "andrebucket" criado para guardar o backend do Terraform. Em seguida, basta rodar os seguintes comandos:
+Também é necessário ter um bucket S3 de nome "andrebucket" criado para guardar o backend do Terraform. Caso não haja o bucket criado ou por alguma razão não é possível usar o o bucket com esse nome de backend, crie um bucket com um novo nome e mude o nome do bucket no resource a seguir que está no main.tf na raíz do projeto:
+
+```hcl
+terraform {
+  backend "s3" {
+    bucket = "{INSERIR NOME DO BUCKET CRIADO AQUI!!!!!!!}"
+    key    = "terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+```
+
+Em seguida, basta rodar os seguintes comandos:
 
 ```bash
 terraform init
